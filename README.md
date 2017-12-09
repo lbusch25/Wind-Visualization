@@ -1,2 +1,2 @@
 # Wind-Visualization
-A particular visualization of wind over the United States.
+A particle visualization of wind vectors over the United States.
