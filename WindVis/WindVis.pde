@@ -40,8 +40,8 @@ void setup() {
   particles = new Particle[numParticles];
   
   for(int i = 0; i < numParticles; i++) {
-    float x = random(0, width);
-    float y = random(0, height);
+    float x = random(0, width); // * uwnd.getColumnCount() / width; //Convert to data coordinates
+    float y = random(0, height); //* uwnd.getRowCount() / height;
     int lifeTime = (int) random(0, maxLife);
     Particle p = new Particle(x, y, lifeTime);
     particles[i] = p;
@@ -56,22 +56,34 @@ void draw() {
   beginShape(POINTS);
   for(int i = 0; i < numParticles; i++) {
     
-    vertex(particles[i].x, particles[i].y);
-    particles[i].decreaseLife();
+    if(particles[i].lifeTime <= 0) {
+      particles[i].x = random(0, width);
+      particles[i].y = random(0, height);
+    }
     
-    float vx = readInterp(uwnd, particles[i].x, particles[i].y);
-    float vy = readInterp(vwnd, particles[i].x, particles[i].y);
+    float x = particles[i].x;
+    float y = particles[i].y;
+    
+    vertex(x, y);
+    
+    float vx = readInterp(uwnd, x * uwnd.getColumnCount() / width,
+        y * uwnd.getRowCount() / height);
+    float vy = readInterp(vwnd, x * uwnd.getColumnCount() / width,
+        y * uwnd.getRowCount() / height);
+
     
     println(vy);
     
-    float nx = particles[i].x + vx*.5;
-    float ny = particles[i].y + vy*.5;
+    float nx = x + vx*.5;
+    float ny = y - vy*.5;
     
     //particles[i].x += vx;
     //particles[i].y += vy;
     
     particles[i].setX(nx);
     particles[i].setY(ny);
+    
+    particles[i].decreaseLife();
   }
   endShape();
 }
