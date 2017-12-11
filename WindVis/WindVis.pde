@@ -85,30 +85,30 @@ void drawMouseLine() {
   // Since a positive 'v' value indicates north, we need to
   // negate it so that it works in the same coordinates as Processing
   // does.
-  float dx = readInterp(uwnd, a, b) * 10;
-  float dy = -readInterp(vwnd, a, b) * 10;
-  //float dx = readRaw(uwnd, (int) a, (int) b) * 10;
-  //float dy = -readRaw(vwnd, (int) a, (int) b) * 10;
+  //float dx = readInterp(uwnd, a, b) * 10;
+  //float dy = -readInterp(vwnd, a, b) * 10;
+  float dx = readRaw(uwnd, (int) a, (int) b) * 10;
+  float dy = -readRaw(vwnd, (int) a, (int) b) * 10;
   line(mouseX, mouseY, mouseX + dx, mouseY + dy);
 }
 
 // Reads a bilinearly-interpolated value at the given a and b
 // coordinates.  Both a and b should be in data coordinates.
 float readInterp(Table tab, float a, float b) {
-  int x = int(a); //Column number
-  int y = int(b); // Row number
+  float x = a; //Column number
+  float y = b; // Row number
   
   //Ask bret about what we should be interpolating since a and b just pull a data point from the csv
   // TODO: do bilinear interpolation
-  //int x1 = floor(a);
-  //int x2 = ceil(a);
-  //int y1 = floor(b);
-  //int y2 = ceil(b);
+  int x1 = floor(a);
+  int x2 = x1 + 1;
+  int y1 = floor(b);
+  int y2 = y1 + 1;
   
-  int x1 = x - 1;
-  int x2 = x + 1;
-  int y1 = y - 1;
-  int y2 = y + 1;
+  //int x1 = x - 1;
+  //int x2 = x + 1;
+  //int y1 = y - 1;
+  //int y2 = y + 1;
   
   float q11 = readRaw(tab, x1, y1);
   float q12 = readRaw(tab, x1, y2);
@@ -136,11 +136,11 @@ float BiInterp(float percentTo, float percentFrom, float q1, float q2) {
   return (percentTo * q1) + (percentFrom * q2);
 }
 
-float percentTo(float x, int x1, int x2) {
+float percentTo(float x, float x1, float x2) {
   return (x2 - x)/(x2 - x1);
 }
 
-float percentFrom(float x, int x1, int x2) {
+float percentFrom(float x, float x1, float x2) {
   return (x - x1) / (x2 - x1);
 }
 
