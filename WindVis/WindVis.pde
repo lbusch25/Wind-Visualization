@@ -59,6 +59,7 @@ void draw() {
     if(particles[i].lifeTime <= 0) {
       particles[i].x = random(0, width);
       particles[i].y = random(0, height);
+      particles[i].lifeTime = maxLife;
     }
     
     float x = particles[i].x;
@@ -101,8 +102,6 @@ void draw() {
     float xk4 = 2*h*vx4; //2 times the time
     float yk4 = 2*h*vy4; //2 times the time
     
-    println(xk4);
-    
     float nx = RK4(x, xk1, xk2, xk3, xk4);
     float ny = RK4(y, -yk1, -yk2, -yk3, -yk4);
     
@@ -129,10 +128,8 @@ void drawMouseLine() {
   // Since a positive 'v' value indicates north, we need to
   // negate it so that it works in the same coordinates as Processing
   // does.
-  //float dx = readInterp(uwnd, a, b) * 10;
-  //float dy = -readInterp(vwnd, a, b) * 10;
-  float dx = readRaw(uwnd, (int) a, (int) b) * 10;
-  float dy = -readRaw(vwnd, (int) a, (int) b) * 10;
+  float dx = readInterp(uwnd, a, b) * 10;
+  float dy = -readInterp(vwnd, a, b) * 10;
   line(mouseX, mouseY, mouseX + dx, mouseY + dy);
 }
 
@@ -148,11 +145,7 @@ float readInterp(Table tab, float a, float b) {
   int x2 = x1 + 1;
   int y1 = floor(b);
   int y2 = y1 + 1;
-  
-  //int x1 = x - 1;
-  //int x2 = x + 1;
-  //int y1 = y - 1;
-  //int y2 = y + 1;
+ 
   
   float q11 = readRaw(tab, x1, y1);
   float q12 = readRaw(tab, x1, y2);
@@ -161,7 +154,6 @@ float readInterp(Table tab, float a, float b) {
   
   float px2 = percentTo(x, x1, x2);
   float px1 = percentFrom(x, x1, x2);
-  //println(px2);
   
   float xy1 = BiInterp(px2, px1, q11, q21);
   float xy2 = BiInterp(px2, px1, q12, q22);
@@ -170,21 +162,12 @@ float readInterp(Table tab, float a, float b) {
   float py1 = percentFrom(y, y1, y2);
   
   float fxy = BiInterp(py2, py1, xy1, xy2);
-  //print(fxy);
-  
-  //return readRaw(tab, x, y);
+
   return fxy;
 }
 
-//float calcK(float pos, float step) {
-//  return step*pos;
-//}
-
-//float calcK2(float pos, float time, float step
-
 float RK4(float pos, float k1, float k2, float k3, float k4) {
   float newpos = pos + (1/6.0)*k1 + (1/3.0)*k2 + (1/3.0)*k3 + (1/6.0)*k4;
-  //println(newpos);
   return newpos;
 }
 
