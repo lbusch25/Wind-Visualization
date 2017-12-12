@@ -79,32 +79,32 @@ void draw() {
     
     float vx2 = readInterp(uwnd, (x + 0.5*xk1) * uwnd.getColumnCount() / width,
         (y + 0.5*xk1)* uwnd.getRowCount() / height);
-    float vy2 = readInterp(vwnd, (x + 0.5*yk1) * uwnd.getColumnCount() / width,
-        (y + 0.5*yk1) * uwnd.getRowCount() / height);
+    float vy2 = readInterp(vwnd, (x - 0.5*yk1) * uwnd.getColumnCount() / width,
+        (y - 0.5*yk1) * uwnd.getRowCount() / height);
         
     float xk2 = 1.5*h*vx2; //1.5 times the time
     float yk2 = 1.5*h*vy2; //1.5 times the time
     
     float vx3 = readInterp(uwnd, (x + 0.5*xk2) * uwnd.getColumnCount() / width,
         (y + 0.5*xk2) * uwnd.getRowCount() / height);
-    float vy3 = readInterp(vwnd, (x + + 0.5*yk2) * uwnd.getColumnCount() / width,
-        (y + 0.5*yk2) * uwnd.getRowCount() / height);
+    float vy3 = readInterp(vwnd, (x - 0.5*yk2) * uwnd.getColumnCount() / width,
+        (y - 0.5*yk2) * uwnd.getRowCount() / height);
         
     float xk3 = 1.5*h*vx3; //1.5 times the time
     float yk3 = 1.5*h*vy3; //1.5 times the time
     
     float vx4 = readInterp(uwnd, (x + xk3) * uwnd.getColumnCount() / width,
         (y + xk3) * uwnd.getRowCount() / height);
-    float vy4 = readInterp(vwnd, (x + yk3) * uwnd.getColumnCount() / width,
-        (y + yk3) * uwnd.getRowCount() / height);
+    float vy4 = readInterp(vwnd, (x - yk3) * uwnd.getColumnCount() / width,
+        (y - yk3) * uwnd.getRowCount() / height);
         
-    float xk4 = 2*h*vx4; //1.5 times the time
-    float yk4 = 2*h*vy4; //1.5 times the time
+    float xk4 = 2*h*vx4; //2 times the time
+    float yk4 = 2*h*vy4; //2 times the time
     
     println(xk4);
     
     float nx = RK4(x, xk1, xk2, xk3, xk4);
-    float ny = RK4(y, yk1, yk2, yk3, yk4);
+    float ny = RK4(y, -yk1, -yk2, -yk3, -yk4);
     
     //Euler s1 = s0 + v(s0)*dt
     //float nx = x + vx*.5;
@@ -183,7 +183,7 @@ float readInterp(Table tab, float a, float b) {
 //float calcK2(float pos, float time, float step
 
 float RK4(float pos, float k1, float k2, float k3, float k4) {
-  float newpos = pos + (1/6)*k1 + (1/3)*k2 + (1/3)*k3 + (1/6)*k4;
+  float newpos = pos + (1/6.0)*k1 + (1/3.0)*k2 + (1/3.0)*k3 + (1/6.0)*k4;
   //println(newpos);
   return newpos;
 }
