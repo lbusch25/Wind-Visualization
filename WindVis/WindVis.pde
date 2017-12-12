@@ -73,7 +73,7 @@ void draw() {
 
     
     //println(vy);
-    float h = 0.5;
+    float h = 0.1;
     float xk1 = h*vx;
     float yk1 = h*vy;
     
